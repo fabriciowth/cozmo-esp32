@@ -1,5 +1,7 @@
 # Cozmo ESP32
 
+[![Instagram](https://img.shields.io/badge/Instagram-%40mrfab.dev-E4405F?logo=instagram&logoColor=white)](https://www.instagram.com/mrfab.dev)
+
 Um robozinho de bancada com rosto animado num OLED, que conversa por voz em português,
 controla o Mac e joga pedra-papel-tesoura.
 
@@ -176,6 +178,15 @@ testes/                sketches de diagnóstico, um por peça
 
 Os sketches em `testes/` são o que mais economizou tempo no projeto: quando algo não funcionava,
 testar a peça sozinha separava problema de ligação de problema de código em poucos minutos.
+
+## Mais projetos
+
+Este robô nasceu de uma caixa de componentes e muita tentativa e erro. Os bastidores, os vídeos
+dele funcionando e os próximos projetos saem primeiro no Instagram:
+
+### [**@mrfab.dev**](https://www.instagram.com/mrfab.dev)
+
+Se o projeto te ajudou, seguir por lá e deixar uma estrela aqui no repositório ajuda bastante.
 
 ## Licença
 
