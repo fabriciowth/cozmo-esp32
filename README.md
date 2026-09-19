@@ -2,6 +2,10 @@
 
 [![Instagram](https://img.shields.io/badge/Instagram-%40mrfab.dev-E4405F?logo=instagram&logoColor=white)](https://www.instagram.com/mrfab.dev)
 
+<img src="assets/demo.gif" width="360" alt="O Cozmo na bancada: olhos animados no OLED, semáforo trocando de cor e o braço se mexendo">
+
+*Rodando na bancada. [Vídeo em melhor qualidade](assets/demo.mp4).*
+
 Um robozinho de bancada com rosto animado num OLED, que conversa por voz em português,
 controla o Mac e joga pedra-papel-tesoura.
 
