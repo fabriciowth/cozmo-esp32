@@ -50,40 +50,30 @@ caixa de texto e o botão de conversa. Toda a parte de áudio acontece no navega
 
 ## Hardware
 
-Os links são buscas na Shopee, não anúncios específicos: os vendedores mudam, os componentes não.
+Exatamente o que foi usado na montagem.
 
 ### Usados no projeto
 
 | Peça | Para quê | Link |
 |---|---|---|
-| ESP32 WROOM-32 (DevKit 30 pinos) | o cérebro | [buscar](https://shopee.com.br/search?keyword=esp32%20wroom%2032%20devkit) |
-| Display OLED I2C 0,96" azul/amarelo | o rosto | [buscar](https://shopee.com.br/search?keyword=display%20oled%20i2c%200.96%20azul%20amarelo) |
-| Módulo semáforo LED | luzes de humor e contagem do jogo | [buscar](https://shopee.com.br/search?keyword=modulo%20semaforo%20led%20arduino) |
-| Buzzer ativo 5V | bipes e efeitos | [buscar](https://shopee.com.br/search?keyword=buzzer%20ativo%205v%20arduino) |
-| Micro servo SG90 (versão 360°, rotação contínua) | o braço | [buscar](https://shopee.com.br/search?keyword=micro%20servo%20sg90%20360%20graus) |
-| Sensor de som KY-037 | ele se assusta com barulho | [buscar](https://shopee.com.br/search?keyword=sensor%20de%20som%20ky-037) |
-| Chave táctil 6x6x5mm | o "carinho" | [buscar](https://shopee.com.br/search?keyword=chave%20tactil%206x6x5) |
-| Protoboard 400 pontos | montagem | [buscar](https://shopee.com.br/search?keyword=protoboard%20400%20pontos) |
-| Jumpers macho/macho e macho/fêmea | ligações | [buscar](https://shopee.com.br/search?keyword=jumper%20macho%20femea%2020cm) |
-| Resistores 220Ω | LEDs e divisor de tensão | [buscar](https://shopee.com.br/search?keyword=resistor%20220%20ohm%201%2F4w) |
+| ESP32 WROOM-32 (DevKit 30 pinos) | o cérebro | [comprar](https://s.shopee.com.br/7fZxJRW2Wt) |
+| Display OLED I2C 0,96" azul/amarelo | o rosto | [comprar](https://s.shopee.com.br/6q0qJxpbBB) |
+| Módulo semáforo LED | luzes de humor e contagem do jogo | [comprar](https://s.shopee.com.br/30o7kx7meP) |
+| Buzzer ativo 5V | bipes e efeitos | [comprar](https://s.shopee.com.br/60RjKUi9Nf) |
+| Micro servo SG90 (versão 360°, rotação contínua) | o braço | [comprar](https://s.shopee.com.br/9fL1hGGOFh) |
+| Sensor de som KY-037 | ele se assusta com barulho | [comprar](https://s.shopee.com.br/8AWDuWm1ib) |
+| Chave táctil 6x6x5mm | o "carinho" | [comprar](https://s.shopee.com.br/6Al9WsJdR8) |
+| Protoboard 400 pontos | montagem | [comprar](https://s.shopee.com.br/7ptNVxqLVa) |
+| Jumpers macho/macho e macho/fêmea | ligações | [comprar](https://s.shopee.com.br/8AWDubFCyx) |
+| Resistores 220Ω | LEDs e divisor de tensão | [comprar](https://s.shopee.com.br/3LQy9k6GUu) |
 
-### Comprados e ainda não usados
+### Use também com essas opções
 
-Chegaram depois, ou esperam a próxima etapa do projeto.
-
-| Peça | Para quê seria | Link |
+| Peça | Para quê | Link |
 |---|---|---|
-| Microfone I2S INMP441 | fazer ele ouvir sozinho, sem depender do celular | [buscar](https://shopee.com.br/search?keyword=inmp441%20microfone%20i2s) |
-| Mini alto-falante 3W 4Ω | a voz sair do robô, não do celular | [buscar](https://shopee.com.br/search?keyword=mini%20alto%20falante%203w%204%20ohms) |
-| Amplificador PAM8403 | ligar o alto-falante (o pino do ESP32 não dá conta) | [buscar](https://shopee.com.br/search?keyword=amplificador%20pam8403) |
-| LED RGB catodo comum | substituir o semáforo como luz de humor | [buscar](https://shopee.com.br/search?keyword=led%20rgb%205mm%20catodo%20comum) |
-| Módulo joystick analógico | controle físico, com um segundo ESP32 | [buscar](https://shopee.com.br/search?keyword=modulo%20joystick%20analogico%20arduino) |
-| Sensor de chama | modo "bombeiro", quando tiver chassi | [buscar](https://shopee.com.br/search?keyword=sensor%20de%20chama%20arduino) |
-| Sensor ultrassônico HC-SR04 (+ suporte) | medir o nível de água num copo; o exemplar comprado não respondeu | [buscar](https://shopee.com.br/search?keyword=sensor%20ultrassonico%20hc-sr04) |
-| LEDs amarelos 5mm | faróis e sinaleiros, quando tiver chassi | [buscar](https://shopee.com.br/search?keyword=led%20amarelo%205mm%20difuso) |
-
-Para a voz sair do próprio robô, o caminho melhor é o **MAX98357A** (amplificador I2S), que divide o
-barramento com o INMP441. O PAM8403 é analógico e dependeria do DAC de 8 bits do ESP32.
+| Microfone I2S INMP441 | fazer ele ouvir sozinho, sem depender do celular | [comprar](https://s.shopee.com.br/W6mmbt266) |
+| Mini alto-falante 3W 4Ω | a voz sair do robô, não do celular | [comprar](https://s.shopee.com.br/2gBHMcO7EB) |
+| Amplificador PAM8403 | ligar o alto-falante (o pino do ESP32 não dá conta) | [comprar](https://s.shopee.com.br/7VGX7XiMq0) |
 
 ## Ligação
 
@@ -162,7 +152,7 @@ estar aberta no Chrome **do Mac**, não no celular.
 
 - **Não dá para interromper a fala dele.** Enquanto ele fala, o microfone para de enviar, senão ele se
   ouve pelo alto-falante e responde a si mesmo. Com fone de ouvido daria para liberar.
-- **A voz sai do celular ou do Mac**, não do robô. O INMP441 e um amplificador I2S resolvem isso.
+- **A voz sai do celular ou do Mac**, não do robô: é o navegador que ouve e fala.
 - **A síntese de voz é a da OpenAI**, porque o TTS do Deepgram ainda não fala português.
 - **O servo é de rotação contínua**, então ele não sabe onde o braço está: os movimentos são por tempo.
 - **Existe código não testado no sketch**: um modo que mede o nível de água num copo com o HC-SR04
