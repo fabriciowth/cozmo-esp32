@@ -1,7 +1,7 @@
 # Cozmo ESP32
 
 Um robozinho de bancada com rosto animado num OLED, que conversa por voz em português,
-controla o Mac, joga pedra-papel-tesoura e avisa quando seu copo de água está cheio.
+controla o Mac e joga pedra-papel-tesoura.
 
 Feito com um ESP32 de R$ 40 e peças de marketplace. O ESP32 cuida do corpo (rosto, luzes,
 som, braço, sensores) e o navegador do celular ou do Mac cuida da conversa, falando direto
@@ -17,8 +17,6 @@ com a API de voz. Assim o ESP32 nunca precisa processar áudio.
 - **Braço servo**: acena, gira, dança.
 - **Pedra, papel e tesoura**: contagem no semáforo, jogada sorteada pelo hardware, placar calculado
   no ESP32 (o modelo não decide quem ganhou).
-- **Vigia do copo d'água**: sensor ultrassônico mede a água subindo, bipe estilo sensor de ré, e ele
-  avisa por voz quando enche.
 - **Controle do Mac**: abre apps e sites, pesquisa no Google e no YouTube.
 - **Cria páginas web por voz**: escreve o HTML, abre no VS Code e no Chrome, e edita ao vivo
   ("troca o fundo pra azul") com o navegador recarregando sozinho.
@@ -37,7 +35,7 @@ navegador (celular ou Mac) ──WebSocket──> Deepgram Voice Agent
   ESP32 (rosto, luzes, som, braço, sensores) <──────┤
      │                                              │
      ▼                                              ▼
-  OLED / LEDs / servo / HC-SR04              ponte Python no Mac
+  OLED / LEDs / servo / sensores              ponte Python no Mac
                                              (abre apps, escreve páginas, WhatsApp)
 ```
 
@@ -62,8 +60,6 @@ Os links são buscas na Shopee, não anúncios específicos: os vendedores mudam
 | Protoboard 400 pontos | montagem | [buscar](https://shopee.com.br/search?keyword=protoboard%20400%20pontos) |
 | Jumpers macho/macho e macho/fêmea | ligações | [buscar](https://shopee.com.br/search?keyword=jumper%20macho%20femea%2020cm) |
 | Resistores 220Ω | LEDs e divisor de tensão | [buscar](https://shopee.com.br/search?keyword=resistor%20220%20ohm%201%2F4w) |
-| Sensor ultrassônico HC-SR04 | nível de água no copo | [buscar](https://shopee.com.br/search?keyword=sensor%20ultrassonico%20hc-sr04) |
-| Suporte para HC-SR04 | apontar o sensor pro copo | [buscar](https://shopee.com.br/search?keyword=suporte%20sensor%20ultrassonico%20hc-sr04) |
 
 ### Comprados e ainda não usados
 
@@ -77,6 +73,7 @@ Chegaram depois, ou esperam a próxima etapa do projeto.
 | LED RGB catodo comum | substituir o semáforo como luz de humor | [buscar](https://shopee.com.br/search?keyword=led%20rgb%205mm%20catodo%20comum) |
 | Módulo joystick analógico | controle físico, com um segundo ESP32 | [buscar](https://shopee.com.br/search?keyword=modulo%20joystick%20analogico%20arduino) |
 | Sensor de chama | modo "bombeiro", quando tiver chassi | [buscar](https://shopee.com.br/search?keyword=sensor%20de%20chama%20arduino) |
+| Sensor ultrassônico HC-SR04 (+ suporte) | medir o nível de água num copo; o exemplar comprado não respondeu | [buscar](https://shopee.com.br/search?keyword=sensor%20ultrassonico%20hc-sr04) |
 | LEDs amarelos 5mm | faróis e sinaleiros, quando tiver chassi | [buscar](https://shopee.com.br/search?keyword=led%20amarelo%205mm%20difuso) |
 
 Para a voz sair do próprio robô, o caminho melhor é o **MAX98357A** (amplificador I2S), que divide o
@@ -92,12 +89,6 @@ barramento com o INMP441. O PAM8403 é analógico e dependeria do DAC de 8 bits 
 | D27 | chave táctil (outro lado no GND) |
 | D15 | KY-037, saída **DO** (VCC no 3V3) |
 | D14 | servo, fio de sinal (VCC no VIN, GND comum) |
-| D18 | HC-SR04 TRIG |
-| D19 | HC-SR04 ECHO, **através de um divisor de tensão** |
-
-O ECHO do HC-SR04 sai em 5V e os pinos do ESP32 aguentam 3,3V. O divisor é um resistor entre o ECHO e
-o D19, e dois em série entre o D19 e o GND. Se você comprar a versão **HC-SR04P** ou **RCWL-1601**,
-que trabalham em 3,3V, o ECHO vai direto no D19 e o divisor não é necessário.
 
 O servo puxa corrente demais para o pino 5V do ESP32 quando tem carga. Se a placa reiniciar sozinha
 ao mexer o braço, é isso: use fonte separada com GND comum, ou um capacitor de 470µF entre 5V e GND.
@@ -147,7 +138,7 @@ estar aberta no Chrome **do Mac**, não no celular.
 "quanto está o bitcoin?"              "acende a luz vermelha" / "pisca a amarela"
 "qual a temperatura?"                 "dá tchau" / "dança"
 "vamos jogar pedra, papel e tesoura"  "abre o WhatsApp" / "abre minha agenda"
-"vou encher meu copo, me avisa"       "pesquisa X no YouTube"
+"pesquisa X no YouTube"
 "cria uma página escrito ..."         "troca o fundo pra azul" / "abre no Chrome"
 "manda no WhatsApp: chego em 10"      → ele lê o rascunho e espera você confirmar
 ```
@@ -168,9 +159,10 @@ estar aberta no Chrome **do Mac**, não no celular.
 - **A voz sai do celular ou do Mac**, não do robô. O INMP441 e um amplificador I2S resolvem isso.
 - **A síntese de voz é a da OpenAI**, porque o TTS do Deepgram ainda não fala português.
 - **O servo é de rotação contínua**, então ele não sabe onde o braço está: os movimentos são por tempo.
-- **O HC-SR04 deste projeto não funcionou.** A ligação foi validada (o ESP32 dispara e lê o pulso),
-  mas o sensor não escuta o eco de volta. Suspeita de defeito de fábrica ou tensão baixa no VIN.
-  O código do copo está pronto e espera um sensor bom.
+- **Existe código não testado no sketch**: um modo que mede o nível de água num copo com o HC-SR04
+  (pinos D18 e D19, com divisor de tensão no ECHO). O sensor comprado não respondeu — a ligação foi
+  validada, o ESP32 dispara e lê o pulso, mas ele não escuta o eco de volta. Como nunca funcionou de
+  ponta a ponta, não conto isso como recurso do projeto.
 
 ## Estrutura
 
