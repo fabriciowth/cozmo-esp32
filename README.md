@@ -3,6 +3,7 @@
 [![Instagram](https://img.shields.io/badge/Instagram-%40mrfab.dev-E4405F?logo=instagram&logoColor=white)](https://www.instagram.com/mrfab.dev)
 [![Site](https://img.shields.io/badge/site-mrfab.dev-111111?logo=googlechrome&logoColor=white)](https://mrfab.dev/)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![Página do projeto](https://img.shields.io/badge/p%C3%A1gina-mrfab.dev%2Fcozmo-38bdf8)](https://mrfab.dev/cozmo/)
 
 <img src="assets/demo.gif" width="360" alt="O Cozmo na bancada: olhos animados no OLED, semáforo trocando de cor e o braço se mexendo">
 

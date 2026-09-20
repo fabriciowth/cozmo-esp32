@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cozmo ESP32 — robô de bancada com voz | mrfab.dev</title>
+<meta name="description" content="Robô de bancada com ESP32: rosto animado no OLED, conversa por voz em português, jogos e controle do Mac. Código aberto e gratuito.">
+<meta property="og:title" content="Cozmo ESP32 — robô de bancada com voz">
+<meta property="og:description" content="Rosto animado, conversa por voz em português e controle do computador. Código aberto.">
+<meta property="og:image" content="https://mrfab.dev/cozmo/demo.gif">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#06080d;--bg-alt:#0a0e16;--surface:#0e1420;--border:rgba(125,211,252,.12);
+--text:#e8edf5;--muted:#9aa7ba;--blue:#2563eb;--cyan:#38bdf8;
+--grad:linear-gradient(120deg,#2563eb,#38bdf8 60%,#7dd3fc);--radius:18px;
+--font-display:"Space Grotesk",sans-serif;--font-body:"Inter",sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+.container{width:min(1040px,92%);margin:0 auto}
+h1,h2,h3{font-family:var(--font-display);line-height:1.15}
+h1{font-size:clamp(2.1rem,5vw,3.2rem);font-weight:700}
+h2{font-size:clamp(1.5rem,3vw,2rem);font-weight:600;margin-bottom:.9rem}
+h3{font-size:1.05rem;font-weight:600;margin-bottom:.35rem}
+p{color:var(--muted)}
+section{padding:clamp(3rem,7vw,5rem) 0;border-top:1px solid var(--border)}
+.top{display:flex;justify-content:space-between;align-items:center;padding:1.2rem 0;font-size:.92rem}
+.top a{color:var(--muted)}
+.top a:hover{color:var(--cyan)}
+.hero{padding:clamp(2rem,5vw,3.5rem) 0 clamp(3rem,6vw,4.5rem);border-top:0}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(1.5rem,4vw,3rem);align-items:center}
+.tag{display:inline-block;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;
+color:var(--cyan);border:1px solid var(--border);border-radius:999px;padding:.3rem .8rem;margin-bottom:1rem}
+.lead{font-size:1.08rem;margin:1rem 0 1.8rem}
+.btns{display:flex;flex-wrap:wrap;gap:.75rem}
+.btn{display:inline-flex;align-items:center;gap:.5rem;font-weight:600;font-size:.98rem;
+padding:.85rem 1.4rem;border-radius:12px;border:1px solid var(--border);transition:.15s}
+.btn-main{background:var(--grad);color:#04121f;border-color:transparent}
+.btn-main:hover{filter:brightness(1.08)}
+.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan)}
+.shot{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;
+background:var(--surface);line-height:0}
+.shot img{width:100%;height:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem}
+.card p{font-size:.93rem}
+table{width:100%;border-collapse:collapse;font-size:.93rem;margin-top:1.2rem}
+th,td{text-align:left;padding:.7rem .6rem;border-bottom:1px solid var(--border)}
+th{font-family:var(--font-display);font-weight:600;color:var(--text)}
+td{color:var(--muted)}
+td a{color:var(--cyan)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;align-items:stretch;margin-top:1.4rem}
+.step{background:var(--bg-alt);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;position:relative}
+.step span{font-family:var(--font-display);font-size:.78rem;color:var(--cyan);letter-spacing:.08em}
+.step h3{margin:.5rem 0 .3rem}
+.step:not(:last-child)::after{content:"";position:absolute;right:-.62rem;top:50%;width:.55rem;height:.55rem;
+border-top:2px solid var(--cyan);border-right:2px solid var(--cyan);transform:translateY(-50%) rotate(45deg);opacity:.55}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{min-width:520px}
+.apoio{background:var(--bg-alt);border:1px solid var(--border);border-radius:var(--radius);
+padding:clamp(1.5rem,4vw,2.5rem);text-align:center}
+.apoio p{max-width:56ch;margin:.8rem auto 1.6rem}
+.free{font-size:.86rem;color:var(--muted);margin-top:1.1rem}
+footer{padding:2.5rem 0;border-top:1px solid var(--border);font-size:.9rem;color:var(--muted);
+display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between}
+footer a:hover{color:var(--cyan)}
+@media(max-width:860px){.steps{grid-template-columns:1fr}
+.step:not(:last-child)::after{right:50%;top:auto;bottom:-.62rem;transform:translateX(50%) rotate(135deg)}}
+@media(max-width:760px){.hero-grid{grid-template-columns:1fr;gap:1.8rem}
+.hero-grid>div:first-child{order:2}.shot{order:1}
+.btns .btn{flex:1 1 100%;justify-content:center}}
+</style>
+</head>
+<body>
+
+<div class="container top">
+  <a href="/"><strong>mrfab.dev</strong></a>
+  <span><a href="https://github.com/fabriciowth/cozmo-esp32">GitHub</a> &nbsp; <a href="https://www.instagram.com/mrfab.dev">Instagram</a></span>
+</div>
+
+<header class="container hero">
+  <div class="hero-grid">
+    <div>
+      <span class="tag">projeto open source</span>
+      <h1>Cozmo ESP32</h1>
+      <p class="lead">Um robô de bancada com rosto animado num display OLED, que conversa por voz
+      em português, joga com você e controla o computador. Feito com um ESP32 e peças de marketplace.</p>
+      <div class="btns">
+        <a class="btn btn-main" href="#apoiar">Apoiar o projeto</a>
+        <a class="btn btn-ghost" href="https://github.com/fabriciowth/cozmo-esp32">Baixar no GitHub — grátis</a>
+      </div>
+      <p class="free">Código aberto sob licença MIT. Sem cadastro, sem pagamento.</p>
+    </div>
+    <div class="shot"><img src="demo.gif" alt="O robô na bancada: olhos animados no OLED, semáforo trocando de cor e o braço se mexendo"></div>
+  </div>
+</header>
+
+<section class="container">
+  <h2>O que ele faz</h2>
+  <div class="grid">
+    <div class="card"><h3>Rosto animado</h3><p>Olhos que piscam, olham em volta, mudam de humor e acompanham o ritmo da fala.</p></div>
+    <div class="card"><h3>Conversa por voz</h3><p>Você fala, ele responde falando, em português, com troca de turno automática.</p></div>
+    <div class="card"><h3>Dados reais</h3><p>Hora, temperatura e cotação de cripto vêm de fontes de verdade. Ele não inventa números.</p></div>
+    <div class="card"><h3>Expressões e luzes</h3><p>“Fica feliz”, “acende a luz vermelha”, “dá tchau”: o rosto, o semáforo e o braço obedecem.</p></div>
+    <div class="card"><h3>Pedra, papel e tesoura</h3><p>Contagem no semáforo, jogada sorteada pelo hardware e placar calculado no próprio ESP32.</p></div>
+    <div class="card"><h3>Controle do computador</h3><p>Abre apps e sites, pesquisa, cria páginas web por voz e escreve no WhatsApp com confirmação.</p></div>
+  </div>
+</section>
+
+<section class="container">
+  <h2>Como funciona</h2>
+  <p>O ESP32 cuida do corpo e o navegador cuida da conversa, falando direto com a API de voz.
+  Assim a placa nunca precisa processar áudio.</p>
+  <div class="steps">
+    <div class="step"><span>01</span><h3>Você fala</h3><p>O microfone é o do celular ou do computador, no navegador.</p></div>
+    <div class="step"><span>02</span><h3>A nuvem entende</h3><p>A API transcreve, pensa e responde falando, em português.</p></div>
+    <div class="step"><span>03</span><h3>O ESP32 reage</h3><p>Rosto, luzes, som e braço acompanham. Ele também aciona o computador.</p></div>
+  </div>
+</section>
+
+<section class="container">
+  <h2>Componentes</h2>
+  <p>Exatamente o que foi usado na montagem.</p>
+  <div class="tablewrap">
+  <table>
+    <tr><th>Peça</th><th>Para quê</th><th></th></tr>
+    <tr><td>ESP32 WROOM-32 (DevKit 30 pinos)</td><td>o cérebro</td><td><a href="https://s.shopee.com.br/7fZxJRW2Wt">comprar</a></td></tr>
+    <tr><td>Display OLED I2C 0,96" azul/amarelo</td><td>o rosto</td><td><a href="https://s.shopee.com.br/6q0qJxpbBB">comprar</a></td></tr>
+    <tr><td>Módulo semáforo LED</td><td>luzes de humor e contagem do jogo</td><td><a href="https://s.shopee.com.br/30o7kx7meP">comprar</a></td></tr>
+    <tr><td>Buzzer ativo 5V</td><td>bipes e efeitos</td><td><a href="https://s.shopee.com.br/60RjKUi9Nf">comprar</a></td></tr>
+    <tr><td>Micro servo SG90 360°</td><td>o braço</td><td><a href="https://s.shopee.com.br/9fL1hGGOFh">comprar</a></td></tr>
+    <tr><td>Sensor de som KY-037</td><td>ele se assusta com barulho</td><td><a href="https://s.shopee.com.br/8AWDuWm1ib">comprar</a></td></tr>
+    <tr><td>Chave táctil 6x6x5mm</td><td>o “carinho”</td><td><a href="https://s.shopee.com.br/6Al9WsJdR8">comprar</a></td></tr>
+    <tr><td>Protoboard 400 pontos</td><td>montagem</td><td><a href="https://s.shopee.com.br/7ptNVxqLVa">comprar</a></td></tr>
+    <tr><td>Jumpers macho/macho e macho/fêmea</td><td>ligações</td><td><a href="https://s.shopee.com.br/8AWDubFCyx">comprar</a></td></tr>
+    <tr><td>Resistores 220Ω</td><td>LEDs e divisor de tensão</td><td><a href="https://s.shopee.com.br/3LQy9k6GUu">comprar</a></td></tr>
+  </table>
+  </div>
+</section>
+
+<section class="container" id="apoiar">
+  <div class="apoio">
+    <h2>Apoie o projeto</h2>
+    <p>O código é aberto e continua gratuito: baixe, modifique e use como quiser, inclusive
+    comercialmente. Se ele te economizou tempo ou te deu uma ideia, você pode retribuir com
+    o valor que achar justo. É isso que mantém os próximos projetos saindo.</p>
+    <div class="btns" style="justify-content:center">
+      <a class="btn btn-main" href="https://donate.stripe.com/00waEX93g4cdgCX3UB3VC00">Apoiar com o valor que quiser</a>
+      <a class="btn btn-ghost" href="https://github.com/fabriciowth/cozmo-esp32">Baixar sem apoiar</a>
+    </div>
+    <p class="free">Cartão, PIX, Apple&nbsp;Pay e Google&nbsp;Pay, pelo Stripe. Nada aqui é bloqueado por pagamento.</p>
+  </div>
+</section>
+
+<footer class="container">
+  <span>Feito por <a href="https://mrfab.dev/">Fabrício Dev</a> — licença MIT</span>
+  <span><a href="https://www.instagram.com/mrfab.dev">@mrfab.dev</a> · <a href="https://github.com/fabriciowth/cozmo-esp32">código no GitHub</a></span>
+</footer>
+
+</body>
+</html>
