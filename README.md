@@ -1,6 +1,8 @@
 # Cozmo ESP32
 
 [![Instagram](https://img.shields.io/badge/Instagram-%40mrfab.dev-E4405F?logo=instagram&logoColor=white)](https://www.instagram.com/mrfab.dev)
+[![Site](https://img.shields.io/badge/site-mrfab.dev-111111?logo=googlechrome&logoColor=white)](https://mrfab.dev/)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 <img src="assets/demo.gif" width="360" alt="O Cozmo na bancada: olhos animados no OLED, semáforo trocando de cor e o braço se mexendo">
 
@@ -173,15 +175,16 @@ testes/                sketches de diagnóstico, um por peça
 Os sketches em `testes/` são o que mais economizou tempo no projeto: quando algo não funcionava,
 testar a peça sozinha separava problema de ligação de problema de código em poucos minutos.
 
-## Mais projetos
+## Autor
 
-Este robô nasceu de uma caixa de componentes e muita tentativa e erro. Os bastidores, os vídeos
-dele funcionando e os próximos projetos saem primeiro no Instagram:
+**Fabrício Dev** — [mrfab.dev](https://mrfab.dev/) · [@mrfab.dev no Instagram](https://www.instagram.com/mrfab.dev) · [@fabriciowth no GitHub](https://github.com/fabriciowth)
 
-### [**@mrfab.dev**](https://www.instagram.com/mrfab.dev)
-
-Se o projeto te ajudou, seguir por lá e deixar uma estrela aqui no repositório ajuda bastante.
+Este robô nasceu de uma caixa de componentes e muita tentativa e erro. Os bastidores e os vídeos
+dele funcionando saem primeiro no Instagram. Se o projeto te ajudou, seguir por lá e deixar uma
+estrela aqui ajuda bastante.
 
 ## Licença
 
-MIT.
+[MIT](LICENSE) — use, modifique e distribua à vontade, inclusive comercialmente. A única condição é
+**manter o aviso de copyright**: se publicar algo derivado deste projeto, credite
+Fabrício Dev (@mrfab.dev).
