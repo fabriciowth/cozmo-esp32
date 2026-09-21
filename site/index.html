@@ -65,6 +65,17 @@ table{min-width:520px}
 padding:clamp(1.5rem,4vw,2.5rem);text-align:center}
 .apoio p{max-width:56ch;margin:.8rem auto 1.6rem}
 .free{font-size:.86rem;color:var(--muted);margin-top:1.1rem}
+.pix{margin-top:2rem;padding-top:1.8rem;border-top:1px solid var(--border)}
+.pix h3{font-size:1.1rem;margin-bottom:.4rem}
+.pixbox{display:flex;gap:1.4rem;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:1.2rem}
+#qr{background:#fff;padding:.7rem;border-radius:12px;line-height:0}
+#qr canvas,#qr img{display:block}
+.pixinfo{text-align:left;max-width:22rem}
+.chave{display:flex;gap:.5rem;align-items:center;background:var(--surface);border:1px solid var(--border);
+border-radius:12px;padding:.7rem .9rem;margin:.5rem 0;font-size:.93rem;word-break:break-all}
+.copy{flex:none;font:600 .82rem var(--font-body);color:#04121f;background:var(--cyan);
+border:0;border-radius:8px;padding:.45rem .8rem;cursor:pointer}
+.copy:hover{filter:brightness(1.08)}
 footer{padding:2.5rem 0;border-top:1px solid var(--border);font-size:.9rem;color:var(--muted);
 display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between}
 footer a:hover{color:var(--cyan)}
@@ -90,7 +101,7 @@ footer a:hover{color:var(--cyan)}
       <p class="lead">Um robô de bancada com rosto animado num display OLED, que conversa por voz
       em português, joga com você e controla o computador. Feito com um ESP32 e peças de marketplace.</p>
       <div class="btns">
-        <a class="btn btn-main" href="https://donate.stripe.com/00waEX93g4cdgCX3UB3VC00">Apoiar o projeto</a>
+        <a class="btn btn-main" href="#apoiar">Apoiar o projeto</a>
         <a class="btn btn-ghost" href="https://github.com/fabriciowth/cozmo-esp32">Baixar no GitHub — grátis</a>
       </div>
       <p class="free">Código aberto sob licença MIT. Sem cadastro, sem pagamento.</p>
@@ -152,7 +163,23 @@ footer a:hover{color:var(--cyan)}
       <a class="btn btn-main" href="https://donate.stripe.com/00waEX93g4cdgCX3UB3VC00">Apoiar com o valor que quiser</a>
       <a class="btn btn-ghost" href="https://github.com/fabriciowth/cozmo-esp32">Baixar sem apoiar</a>
     </div>
-    <p class="free">Cartão, PIX, Apple&nbsp;Pay e Google&nbsp;Pay, pelo Stripe. Nada aqui é bloqueado por pagamento.</p>
+    <p class="free">Cartão, Apple&nbsp;Pay e Google&nbsp;Pay, pelo Stripe. Nada aqui é bloqueado por pagamento.</p>
+
+    <div class="pix">
+      <h3>Ou apoie via PIX</h3>
+      <p style="font-size:.93rem">Aponte a câmera do seu banco para o código, ou copie a chave.</p>
+      <div class="pixbox">
+        <div id="qr" aria-label="QR Code do PIX"></div>
+        <div class="pixinfo">
+          <div class="chave"><span id="chave">fabriciowth@gmail.com</span>
+            <button class="copy" data-alvo="chave">copiar</button></div>
+          <div class="chave"><span>Código copia e cola</span>
+            <button class="copy" data-alvo="brcode">copiar</button></div>
+          <span id="brcode" hidden>00020126430014br.gov.bcb.pix0121fabriciowth@gmail.com5204000053039865802BR5912FABRICIO DEV6008LINHARES62070503***63047D55</span>
+          <p style="font-size:.82rem">Fabrício Dev · chave e-mail</p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -161,5 +188,16 @@ footer a:hover{color:var(--cyan)}
   <span><a href="https://www.instagram.com/mrfab.dev">@mrfab.dev</a> · <a href="https://github.com/fabriciowth/cozmo-esp32">código no GitHub</a></span>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+new QRCode(document.getElementById('qr'),
+  {text:document.getElementById('brcode').textContent,width:168,height:168,correctLevel:QRCode.CorrectLevel.M});
+document.querySelectorAll('.copy').forEach(b=>b.onclick=async()=>{
+  try{
+    await navigator.clipboard.writeText(document.getElementById(b.dataset.alvo).textContent);
+    const antes=b.textContent;b.textContent='copiado!';setTimeout(()=>b.textContent=antes,1800);
+  }catch(e){b.textContent='copie manualmente'}
+});
+</script>
 </body>
 </html>
