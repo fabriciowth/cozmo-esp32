@@ -323,6 +323,14 @@ const FUNCS=[
    required:['draft_id']}},
  {name:'wa_cancel',description:'Apaga o rascunho que esta na caixa de mensagem do WhatsApp.',
   parameters:{type:'object',properties:{}}},
+ {name:'find_image',
+  description:'Procura fotos reais de uso livre (Openverse) e devolve os enderecos. Use SEMPRE que a '+
+              'pagina precisar de foto, e depois coloque no HTML exatamente a url devolvida. '+
+              'Nunca invente endereco de imagem.',
+  parameters:{type:'object',properties:{
+   query:{type:'string',description:'o que procurar, em ingles da resultados melhores'},
+   count:{type:'number',description:'quantas opcoes, de 1 a 5. Padrao 3'}},
+   required:['query']}},
  {name:'page_read',
   description:'Le o HTML atual da pagina que voce esta criando. Chame antes de qualquer alteracao.',
   parameters:{type:'object',properties:{}}},
@@ -405,6 +413,17 @@ async function runFn(name,a){
    const ms=Math.round(Math.min(30,Math.max(2,+a.seconds||6))*1000);
    esp('/mood?m='+m+'&hold='+ms);
    return {ok:true,expressao:a.mood};
+ }
+ if(name==='find_image'){
+   const q=String(a.query||'').trim();
+   if(!q)return {erro:'diga o que procurar'};
+   const n=Math.min(5,Math.max(1,Math.round(+a.count||3)));
+   try{
+     const r=await(await fetch('https://api.openverse.org/v1/images/?q='+encodeURIComponent(q)+
+       '&page_size='+n+'&license_type=commercial&mature=false')).json();
+     const fotos=(r.results||[]).map(x=>({url:x.url,titulo:x.title,autor:x.creator,licenca:x.license}));
+     return fotos.length?{fotos}:{erro:'nao achei foto de '+q};
+   }catch(e){return {erro:'busca de imagens indisponivel agora'}}
  }
  if(name==='wa_draft'){
    const r=await ponte('/wa/draft',{text:a.text||''});
@@ -498,6 +517,9 @@ function settings(){
      'mensagem: chame wa_draft com o texto, leia o texto em voz alta e pergunte se pode enviar. So '+
      'chame wa_send se a pessoa confirmar claramente. Se ela pedir mudanca, chame wa_cancel e depois '+
      'wa_draft com o texto novo. Se ela desistir, chame wa_cancel. Nunca envie sem confirmacao. '+
+     'Quando a pagina pedir foto, chame find_image e use a url exata devolvida na tag img, com um '+
+     'credito pequeno no rodape (autor e licenca). Nunca invente endereco de imagem: so use os que '+
+     'vierem de find_image. '+
      'Voce tambem cria uma pagina web. Para criar: chame page_write com um HTML completo, bonito e '+
      'moderno (fonte boa, cores harmoniosas, layout centralizado e responsivo, CSS dentro de <style>, '+
      'sem arquivos externos) e em seguida page_open vscode. Para alterar: chame page_read, mude SO o '+
