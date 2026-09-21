@@ -65,9 +65,9 @@ table{min-width:520px}
 padding:clamp(1.5rem,4vw,2.5rem);text-align:center}
 .apoio p{max-width:56ch;margin:.8rem auto 1.6rem}
 .free{font-size:.86rem;color:var(--muted);margin-top:1.1rem}
-.pix{margin-top:2rem;padding-top:1.8rem;border-top:1px solid var(--border)}
-.pix h3{font-size:1.1rem;margin-bottom:.4rem}
-.pixbox{display:flex;gap:1.4rem;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:1.2rem}
+.outra{margin-top:2rem;padding-top:1.8rem;border-top:1px solid var(--border)}
+.pixinfo h3{font-size:1.05rem;margin-bottom:.2rem}
+.pixbox{display:flex;gap:1.6rem;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:1.6rem}
 #qr{background:#fff;padding:.7rem;border-radius:12px;line-height:0}
 #qr canvas,#qr img{display:block}
 .pixinfo{text-align:left;max-width:22rem}
@@ -159,26 +159,28 @@ footer a:hover{color:var(--cyan)}
     <p>O código é aberto e continua gratuito: baixe, modifique e use como quiser, inclusive
     comercialmente. Se ele te economizou tempo ou te deu uma ideia, você pode retribuir com
     o valor que achar justo. É isso que mantém os próximos projetos saindo.</p>
-    <div class="btns" style="justify-content:center">
-      <a class="btn btn-main" href="https://donate.stripe.com/00waEX93g4cdgCX3UB3VC00">Apoiar com o valor que quiser</a>
-      <a class="btn btn-ghost" href="https://github.com/fabriciowth/cozmo-esp32">Baixar sem apoiar</a>
-    </div>
-    <p class="free">Cartão, Apple&nbsp;Pay e Google&nbsp;Pay, pelo Stripe. Nada aqui é bloqueado por pagamento.</p>
 
-    <div class="pix">
-      <h3>Ou apoie via PIX</h3>
-      <p style="font-size:.93rem">Aponte a câmera do seu banco para o código, ou copie a chave.</p>
-      <div class="pixbox">
-        <div id="qr" aria-label="QR Code do PIX"></div>
-        <div class="pixinfo">
-          <div class="chave"><span id="chave">fabriciowth@gmail.com</span>
-            <button class="copy" data-alvo="chave">copiar</button></div>
-          <div class="chave"><span>Código copia e cola</span>
-            <button class="copy" data-alvo="brcode">copiar</button></div>
-          <span id="brcode" hidden>00020126430014br.gov.bcb.pix0121fabriciowth@gmail.com5204000053039865802BR5912FABRICIO DEV6008LINHARES62070503***63047D55</span>
-          <p style="font-size:.82rem">Fabrício Dev · chave e-mail</p>
-        </div>
+    <div class="pixbox">
+      <div id="qr" aria-label="QR Code do PIX"></div>
+      <div class="pixinfo">
+        <h3>PIX — o valor é você quem escolhe</h3>
+        <p style="font-size:.9rem;margin:.3rem 0 .2rem">Aponte a câmera do seu banco para o código, ou copie a chave.</p>
+        <div class="chave"><span id="chave">fabriciowth@gmail.com</span>
+          <button class="copy" data-alvo="chave">copiar</button></div>
+        <div class="chave"><span>Código copia e cola</span>
+          <button class="copy" data-alvo="brcode">copiar</button></div>
+        <span id="brcode" hidden>00020126430014br.gov.bcb.pix0121fabriciowth@gmail.com5204000053039865802BR5912FABRICIO DEV6008LINHARES62070503***63047D55</span>
+        <p style="font-size:.82rem">Fabrício Dev · chave e-mail</p>
       </div>
+    </div>
+
+    <div class="outra">
+      <p style="font-size:.93rem;margin-bottom:.9rem">Prefere cartão, Apple&nbsp;Pay ou Google&nbsp;Pay?</p>
+      <div class="btns" style="justify-content:center">
+        <a class="btn btn-main" href="https://donate.stripe.com/00waEX93g4cdgCX3UB3VC00">Apoiar pelo Stripe</a>
+        <a class="btn btn-ghost" href="https://github.com/fabriciowth/cozmo-esp32">Baixar sem apoiar</a>
+      </div>
+      <p class="free">Nada aqui é bloqueado por pagamento.</p>
     </div>
   </div>
 </section>
