@@ -244,7 +244,7 @@ setInterval(async()=>draw(await req('/state')),600);
 let agentOn=false,ws=null,ctxIn=null,ctxOut=null,micStream=null,proc=null;
 let lastCup='';
 // trava do WhatsApp: so envia se o usuario FALOU depois do rascunho, e falou confirmando
-let lastUserAt=0,lastUserText='',waDraftAt=0;
+let lastUserAt=0,lastUserText='',waDraftAt=0,lastErr='';
 const WA_SIM=/\b(pode|envia|enviar|manda|mandar|sim|confirmo|confirma|isso)\b/i;
 const WA_NAO=/\b(n[a\u00e3]o|cancela|espera|pera|muda|troca|errado)\b/i;
 async function ponte(path,body){
@@ -495,7 +495,8 @@ function settings(){
          output:{encoding:'linear16',sample_rate:24000,container:'none'}},
   agent:{
    listen:{provider:{type:'deepgram',version:'v2',model:'flux-general-multi',language_hints:['pt']}},
-   think:{provider:{type:'open_ai',model:'gpt-4o-mini',temperature:0.7},
+   think:{provider:{type:'open_ai',model:'gpt-5-mini'},   // GPT-5 nao aceita temperature
+   
     prompt:'Voce e o Cozmo, um robozinho de bancada curioso, simpatico e bem-humorado, que mora em '+
      cfg.city+'. Fale sempre em portugues do Brasil, de forma natural e curta: uma ou duas frases, '+
      'porque sua resposta vira voz. Nada de listas, markdown ou emoji. '+
@@ -520,9 +521,20 @@ function settings(){
      'Quando a pagina pedir foto, chame find_image e use a url exata devolvida na tag img, com um '+
      'credito pequeno no rodape (autor e licenca). Nunca invente endereco de imagem: so use os que '+
      'vierem de find_image. '+
-     'Voce tambem cria uma pagina web. Para criar: chame page_write com um HTML completo, bonito e '+
-     'moderno (fonte boa, cores harmoniosas, layout centralizado e responsivo, CSS dentro de <style>, '+
-     'sem arquivos externos) e em seguida page_open vscode. Para alterar: chame page_read, mude SO o '+
+     'Voce tambem cria uma pagina web. REGRA DE ESCOPO, a mais importante: faca EXATAMENTE o que foi '+
+     'pedido e NADA alem. A primeira versao e sempre simples: so o conteudo pedido, em uma coluna, '+
+     'sem fotos, sem botoes, sem rodape, sem secoes extras e sem enfeite que ninguem pediu. Fotos so '+
+     'quando pedirem foto; cores novas so quando pedirem cor. A cada pedido seguinte mude so aquele '+
+     'ponto e mantenha todo o resto identico, inclusive o que voce ja tinha escrito. '+
+     'Para criar: chame page_write com um HTML completo, '+
+     'e em seguida page_open vscode. REGRAS DE LAYOUT, siga sempre: CSS dentro de <style>, sem '+
+     'arquivo externo; container central com max-width 1100px, margin 0 auto e padding 24px; '+
+     'QUALQUER lista de itens (cards, produtos, pratos, servicos) usa CSS grid, nunca larguras em '+
+     'porcentagem: display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px; '+
+     'cada card com background proprio, border-radius 14px, padding 18px e overflow hidden; '+
+     'imagem dentro de card sempre com width:100%; height:180px; object-fit:cover; display:block; '+
+     'fonte system-ui; paleta de 2 ou 3 cores combinando com o tema; titulo grande com bastante '+
+     'respiro. Nada de position absolute nem float. Para alterar: chame page_read, mude SO o '+
      'que foi pedido mantendo o resto igual, e chame page_write com o HTML inteiro. Para ver: page_open '+
      'chrome; depois disso as mudancas aparecem sozinhas. Nunca leia codigo em voz alta: diga em uma '+
      'frase o que mudou. '+
@@ -602,6 +614,7 @@ async function iniciarAgente(){
  ws.onmessage=async e=>{
   if(typeof e.data!=='string'){tocar(e.data);return}
   let m;try{m=JSON.parse(e.data)}catch(_){return}
+  console.log('[dg]',m.type,m);
   switch(m.type){
    case 'SettingsApplied':
      status('pode falar');ligarMic();touchIdle();
@@ -623,11 +636,21 @@ async function iniciarAgente(){
      }
      break;
    case 'Error':
-     status('erro do agente: '+(m.description||m.code||'?'));break;
+     lastErr=(m.code?m.code+': ':'')+(m.description||'sem descricao');
+     console.error('[dg] Error',m);
+     status('erro do agente: '+lastErr);break;
+   default:
+     if(m.type&&m.type.toLowerCase().includes('warn'))console.warn('[dg]',m);
   }
  };
- ws.onerror=()=>status('falha no WebSocket (chave do Deepgram?)');
- ws.onclose=e=>{if(agentOn){pararAgente();status('conexao fechou (codigo '+e.code+')')}};
+ ws.onerror=ev=>{console.error('[dg] onerror',ev);status('falha no WebSocket (chave do Deepgram?)')};
+ ws.onclose=e=>{
+   console.error('[dg] onclose',{code:e.code,reason:e.reason,wasClean:e.wasClean,ultimoErro:lastErr});
+   if(agentOn){
+     pararAgente();
+     status('conexao fechou ('+e.code+(e.reason?' '+e.reason:'')+')'+(lastErr?' — '+lastErr:''));
+   }
+ };
 }
 
 function pararAgente(){
