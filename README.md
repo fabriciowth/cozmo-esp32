@@ -16,6 +16,10 @@ Feito com um ESP32 de R$ 40 e peças de marketplace. O ESP32 cuida do corpo (ros
 som, braço, sensores) e o navegador do celular ou do Mac cuida da conversa, falando direto
 com a API de voz. Assim o ESP32 nunca precisa processar áudio.
 
+> **Versão nova:** o Cozmo também roda numa telinha redonda AMOLED (Waveshare ESP32-S3 1.75),
+> sozinho, sem celular: acorda com "Hey Cozmo", conversa por voz, diz a hora e o clima, muda o
+> volume e reage quando você chacoalha ou faz carinho. Veja [cozmo-amoled](https://github.com/fabriciowth/cozmo-amoled).
+
 ## O que ele faz
 
 - **Rosto animado**: olhos que piscam, olham em volta, mudam de humor e "respiram" no ritmo da fala.
